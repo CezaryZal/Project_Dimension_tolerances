@@ -1,0 +1,2 @@
+public class DbAdapter {
+}
