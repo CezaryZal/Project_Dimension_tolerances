@@ -2,7 +2,7 @@ import java.sql.*;
 
 public class DbAdapter {
 
-    String jdbUrl = "jdbc:mysql://localhost:3306/test?useSSL=false";
+    String jdbUrl = "jdbc:mysql://localhost:3306/tolerancevalue?useSSL=false";
     String username = "root";
     String password = "SQLSerwer2019";
 
