@@ -4,7 +4,7 @@ public class DimensionTolerances {
     public static void main(String[] args) {
 
 
-        CreateDimension createDimension = new CreateDimension();
+        CreateDimension dimensionDimension = new CreateDimension();
         Scanner scanerInput = new Scanner(System.in);
         String input = "45g9";
 //        while (!input.equals("stop")) {
@@ -14,7 +14,7 @@ public class DimensionTolerances {
 //                System.out.println("Zakonczono wypisywanie odchylek wymiaru.");
 //                break;
 //            }
-            Dimension dimension = createDimension.createDimension(input);
+            Dimension dimension = dimensionDimension.create(input);
             System.out.println(dimension);
 //        }
 

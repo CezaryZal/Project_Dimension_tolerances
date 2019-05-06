@@ -4,7 +4,7 @@ public class CreateDimension {
     private int valueOfDimension = 0;
 
 
-    public Dimension createDimension(String input) {
+    public Dimension create(String input) {
 
         databaseDimensionTables.connect();
         Dimension dimension = new Dimension(makeValuesForDimension(input), makeLowerDeviation(input), makeUpperDeviation(input));

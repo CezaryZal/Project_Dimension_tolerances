@@ -34,8 +34,7 @@ public class DatabaseDimensionTables extends DbAdapter {
 
         try {
             PreparedStatement stat = connection.prepareStatement("SELECT * FROM nominal_tolerance WHERE " +
-                    "`lower_dimension[mm]`=?");
-            stat.setInt(1, lastDimension);
+                    "`lower_dimension[mm]`=" + lastDimension);
             resultSet = stat.executeQuery();
 
             while (resultSet.next()){
