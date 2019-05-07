@@ -1,48 +1,65 @@
 public class CreateDimension {
     DatabaseDimensionTables databaseDimensionTables = new DatabaseDimensionTables();
 
-    private int valueOfDimension = 0;
-
+    private char symbolFromInput;
+    private boolean symbolIsOverHh;
 
     public Dimension create(String input) {
+        int valueOfDimension = getValuesForDimension(input);
+        symbolIsOverHh = isSymbolOverHh(input);
+        symbolFromInput = getLetterOfInput(input);
 
         databaseDimensionTables.connect();
-        Dimension dimension = new Dimension(makeValuesForDimension(input), makeLowerDeviation(input), makeUpperDeviation(input));
+        int deviationByValueAndSymbol = databaseDimensionTables.getDeviationByValueAndSymbol(valueOfDimension,
+                symbolFromInput, symbolIsOverHh, getValueItFromInput(input));
+        int deviationByValueAndIt = databaseDimensionTables.getDeviationByValueAndIt(valueOfDimension, getValueItFromInput(input));
         databaseDimensionTables.disconnect();
 
-        return dimension;
+        Dimension dimension = new Dimension(valueOfDimension,
+                makeLowerDeviation(deviationByValueAndSymbol, deviationByValueAndIt),
+                makeUpperDeviation(deviationByValueAndSymbol, deviationByValueAndIt));
 
+        return dimension;
     }
 
-    int makeValuesForDimension(String input) {
+    private int makeUpperDeviation(int deviationByValueAndSymbol, int deviationByValueAndIt) {
+        if (Character.isLowerCase(symbolFromInput)) {
+            if (symbolIsOverHh) {
+                return deviationByValueAndSymbol + deviationByValueAndIt;
+            }
+            return deviationByValueAndSymbol;
+        }
+        if (symbolIsOverHh){
+            return deviationByValueAndSymbol;
+        }
+        return deviationByValueAndSymbol + deviationByValueAndIt;
+    }
+
+    private int makeLowerDeviation(int deviationByValueAndSymbol, int deviationByValueAndIt) {
+        if (Character.isLowerCase(symbolFromInput)) {
+            if (symbolIsOverHh){
+                return deviationByValueAndSymbol;
+            }
+            return deviationByValueAndSymbol - deviationByValueAndIt;
+        }
+        if (symbolIsOverHh){
+            return deviationByValueAndSymbol - deviationByValueAndIt;
+        }
+        return deviationByValueAndSymbol;
+    }
+
+    private int getValuesForDimension(String input) {
         String valueOfInputString = "";
         for (int i = 0; i <= input.length() - 2; i++) {
             if (Character.isDigit(input.charAt(i))) { // sprawdza czy to cyfra
                 valueOfInputString += input.charAt(i);
             } else break;
         }
-        valueOfDimension = Integer.parseInt(valueOfInputString);
-        return valueOfDimension;
+        return Integer.parseInt(valueOfInputString);
     }
 
-    int makeUpperDeviation(String input) {
-        if (Character.isLowerCase(getLetterOfInput(input))) {
-            return databaseDimensionTables.getDeviationByValueAndSymbol(valueOfDimension, getLetterOfInput(input));
-        }
-        return databaseDimensionTables.getDeviationByValueAndSymbol(valueOfDimension, getLetterOfInput(input)) +
-                databaseDimensionTables.getDeviationByValueAndIt(valueOfDimension, getValueItFromInput(input));
-    }
-
-    int makeLowerDeviation(String input) {
-        if (Character.isUpperCase(getLetterOfInput(input))) {
-            return databaseDimensionTables.getDeviationByValueAndSymbol(valueOfDimension, getLetterOfInput(input));
-        }
-        return databaseDimensionTables.getDeviationByValueAndSymbol(valueOfDimension, getLetterOfInput(input)) +
-                databaseDimensionTables.getDeviationByValueAndIt(valueOfDimension, getValueItFromInput(input));
-    }
-
-    char getLetterOfInput(String input) {
-        for (int i = input.length() - 1; i > 1; i--) {
+    private char getLetterOfInput(String input) {
+        for (int i = input.length() - 1; i >= 1; i--) {
             if (!Character.isDigit(input.charAt(i))) {
                 return input.charAt(i);
             }
@@ -50,7 +67,7 @@ public class CreateDimension {
         return 'l'; // mozna dac wyjatek albo warunek sprawdzajacy czy jest jakis znak w input'cie
     }
 
-    int getValueItFromInput(String input) {
+    private int getValueItFromInput(String input) {
         String valueOfIt = "";
         for (int i = input.length() - 2; i <= input.length() - 1; i++) {
             if (Character.isDigit(input.charAt(i))) {
@@ -60,6 +77,12 @@ public class CreateDimension {
         return Integer.valueOf(valueOfIt);
     }
 
-
-
+    private boolean isSymbolOverHh(String input) {
+        char tmpSymbolFromInput = Character.toLowerCase(getLetterOfInput(input));
+        if (tmpSymbolFromInput == 'j' || tmpSymbolFromInput == 'k' || tmpSymbolFromInput == 'm' || tmpSymbolFromInput == 'n' ||
+                tmpSymbolFromInput == 'p' || tmpSymbolFromInput == 'r' || tmpSymbolFromInput == 's') {
+            return true;
+        }
+        return false;
+    }
 }
