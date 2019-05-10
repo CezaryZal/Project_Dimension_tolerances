@@ -50,6 +50,7 @@ public class DatabaseDimensionTables extends DbAdapter {
         return getDeviationFromDB(SQLDeviationForIT, columnLabelForIT);
     }
 
+
     private int getLowerDimension(int valueOfDimension, String SQLLowerDimension) {
         int lastDimension = 0;
 
