@@ -1,4 +1,4 @@
-public class CreateDimension {
+public class DimensionParser {
     DatabaseDimensionTables databaseDimensionTables = new DatabaseDimensionTables();
 
     private char symbolFromInput;
@@ -14,6 +14,7 @@ public class CreateDimension {
                 symbolFromInput, symbolIsOverHh, getValueItFromInput(input));
         int deviationByValueAndIt = databaseDimensionTables.getDeviationByValueAndIt(valueOfDimension, getValueItFromInput(input));
         databaseDimensionTables.disconnect();
+        // wywalić disconnect i dać grupę try catch
 
         Dimension dimension = new Dimension(valueOfDimension,
                 makeLowerDeviation(deviationByValueAndSymbol, deviationByValueAndIt),
@@ -78,9 +79,8 @@ public class CreateDimension {
     }
 
     private boolean isSymbolOverHh(String input) {
-        char tmpSymbolFromInput = Character.toLowerCase(getLetterOfInput(input));
-        if (tmpSymbolFromInput == 'j' || tmpSymbolFromInput == 'k' || tmpSymbolFromInput == 'm' || tmpSymbolFromInput == 'n' ||
-                tmpSymbolFromInput == 'p' || tmpSymbolFromInput == 'r' || tmpSymbolFromInput == 's') {
+        int symbolInteger = Character.toLowerCase(getLetterOfInput(input));
+        if (symbolInteger > 105 && symbolInteger < 120) {
             return true;
         }
         return false;

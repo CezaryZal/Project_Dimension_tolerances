@@ -10,6 +10,7 @@ public class DatabaseDimensionTables extends DbAdapter {
         String columnLabelForSymbol = "" + symbolFromInput;
         String SQLLowerDimensionForSymbol = "SELECT * FROM basic_deviations_for_shaft_under_symbol_h";
         int lowerDimension = getLowerDimension(valueOfDimension, SQLLowerDimensionForSymbol);
+        int symbolInteger = symbolFromInput;
 
         if (Character.isLowerCase(symbolFromInput)) {
             if (symbolIsOverHh) {
@@ -28,7 +29,7 @@ public class DatabaseDimensionTables extends DbAdapter {
                         "`lower_dimension[mm]`=" + lowerDimension;
             }
         }
-        if ((symbolFromInput == 'K' || symbolFromInput == 'M' || symbolFromInput == 'N') && valueOfDimension > 3){
+        if (symbolInteger > 74 && symbolInteger < 80 && valueOfDimension > 3){
 
             String SQLLowerDimensionForAdaValue = "SELECT * FROM addition_for_hole_over_symbol_h";
             String SQLAddDeviationForSymbol = "SELECT * FROM addition_for_hole_over_symbol_h WHERE `lower_dimension[mm]`=" +
