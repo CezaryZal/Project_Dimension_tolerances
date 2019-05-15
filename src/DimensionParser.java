@@ -1,20 +1,28 @@
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class DimensionParser {
-    DatabaseDimensionTables databaseDimensionTables = new DatabaseDimensionTables();
+    private DatabaseDimensionTables databaseDimensionTables = new DatabaseDimensionTables();
+    private static final Pattern pattern = Pattern.compile("(([1-9][0-9]*)([a-zA-Z])([1-9][0-8]*))");
 
     private char symbolFromInput;
     private boolean symbolIsOverHh;
 
     public Dimension create(String input) {
         int valueOfDimension = getValuesForDimension(input);
-        symbolIsOverHh = isSymbolOverHh(input);
         symbolFromInput = getLetterOfInput(input);
+        symbolIsOverHh = isSymbolOverHh(input);
 
-        databaseDimensionTables.connect();
-        int deviationByValueAndSymbol = databaseDimensionTables.getDeviationByValueAndSymbol(valueOfDimension,
-                symbolFromInput, symbolIsOverHh, getValueItFromInput(input));
-        int deviationByValueAndIt = databaseDimensionTables.getDeviationByValueAndIt(valueOfDimension, getValueItFromInput(input));
-        databaseDimensionTables.disconnect();
-        // wywalić disconnect i dać grupę try catch
+
+
+
+            int deviationByValueAndSymbol = databaseDimensionTables.getDeviationByValueAndSymbol(valueOfDimension,
+                    symbolFromInput, symbolIsOverHh, getValueItFromInput(input));
+            int deviationByValueAndIt = databaseDimensionTables.getDeviationByValueAndIt(valueOfDimension, getValueItFromInput(input));
+
+
+
 
         Dimension dimension = new Dimension(valueOfDimension,
                 makeLowerDeviation(deviationByValueAndSymbol, deviationByValueAndIt),
@@ -51,29 +59,31 @@ public class DimensionParser {
 
     private int getValuesForDimension(String input) {
         String valueOfInputString = "";
-        for (int i = 0; i <= input.length() - 2; i++) {
-            if (Character.isDigit(input.charAt(i))) { // sprawdza czy to cyfra
-                valueOfInputString += input.charAt(i);
-            } else break;
+
+        Matcher matcher = pattern.matcher(input);
+        if (matcher.matches()) {
+            valueOfInputString = matcher.group(2);
         }
         return Integer.parseInt(valueOfInputString);
     }
 
     private char getLetterOfInput(String input) {
-        for (int i = input.length() - 1; i >= 1; i--) {
-            if (!Character.isDigit(input.charAt(i))) {
-                return input.charAt(i);
-            }
+        String lettersOfInput = "";
+
+        Matcher matcher = pattern.matcher(input);
+        if (matcher.matches()) {
+            lettersOfInput = matcher.group(3);
         }
-        return 'l'; // mozna dac wyjatek albo warunek sprawdzajacy czy jest jakis znak w input'cie
+        return lettersOfInput.charAt(0);
     }
 
     private int getValueItFromInput(String input) {
         String valueOfIt = "";
-        for (int i = input.length() - 2; i <= input.length() - 1; i++) {
-            if (Character.isDigit(input.charAt(i))) {
-                valueOfIt += input.charAt(i);
-            }
+
+        Matcher matcher = pattern.matcher(input);
+
+        if (matcher.matches()) {
+            valueOfIt = matcher.group(4);
         }
         return Integer.valueOf(valueOfIt);
     }

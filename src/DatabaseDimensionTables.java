@@ -1,7 +1,14 @@
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
 
-public class DatabaseDimensionTables extends DbAdapter {
+public class DatabaseDimensionTables {
+
+    private final String JDB_URL = "jdbc:mysql://localhost:3306/tolerancevalue?useSSL=false";
+    private final String USENAME = "root";
+    private final String PASSWORD = "SQLSerwer2019";
+
+    private Connection connection = null;
+    private Statement statement = null;
+    private ResultSet resultSet = null;
 
 
     public int getDeviationByValueAndSymbol(int valueOfDimension, char symbolFromInput, boolean symbolIsOverHh, int valueToleranceClass) {
@@ -56,6 +63,7 @@ public class DatabaseDimensionTables extends DbAdapter {
         int lastDimension = 0;
 
         try {
+            Connection connection = DriverManager.getConnection(JDB_URL, USENAME, PASSWORD);
             statement = connection.createStatement();
             resultSet = statement.executeQuery(SQLLowerDimension);
 
@@ -68,8 +76,9 @@ public class DatabaseDimensionTables extends DbAdapter {
                 }
                 lastDimension = currentDimension;
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (Exception error) {
+            System.out.println("Wysątpienie błedu. Proszę sprawdzić poprawność wpisania wymiaru.");
+            System.out.println("Wychwycony błąd: " + error.getMessage());
         }
         return lastDimension;
     }
@@ -78,14 +87,16 @@ public class DatabaseDimensionTables extends DbAdapter {
         int valueFromDB = 0;
 
         try {
+            Connection connection = DriverManager.getConnection(JDB_URL, USENAME, PASSWORD);
             PreparedStatement stat = connection.prepareStatement(SQLDeviation);
             resultSet = stat.executeQuery();
 
             while (resultSet.next()) {
                 valueFromDB = resultSet.getInt(columnLabel);
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (Exception error) {
+            System.out.println("Wysątpienie błedu. Proszę sprawdzić poprawność wpisania wymiaru.");
+            System.out.println("Wychwycony błąd: " + error.getMessage());
         }
         return valueFromDB;
     }
