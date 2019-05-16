@@ -3,7 +3,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class DimensionParser {
-    private DatabaseDimensionTables databaseDimensionTables = new DatabaseDimensionTables();
+    private DeviationFromToleranceDb deviation = new DeviationFromToleranceDb();
     private static final Pattern pattern = Pattern.compile("(([1-9][0-9]*)([a-zA-Z])([1-9][0-8]*))");
 
     private char symbolFromInput;
@@ -12,23 +12,16 @@ public class DimensionParser {
     public Dimension create(String input) {
         int valueOfDimension = getValuesForDimension(input);
         symbolFromInput = getLetterOfInput(input);
-        symbolIsOverHh = isSymbolOverHh(input);
 
+        symbolIsOverHh = Character.toLowerCase(getLetterOfInput(input)) > 105 && Character.toLowerCase(getLetterOfInput(input)) < 120;
 
+        int deviationByValueAndSymbol = deviation.getDeviationByValueAndSymbol(valueOfDimension,
+                symbolFromInput, symbolIsOverHh, getValueITFromInput(input));
+        int deviationByValueAndIt = deviation.getDeviationByValueAndIt(valueOfDimension, getValueITFromInput(input));
 
-
-            int deviationByValueAndSymbol = databaseDimensionTables.getDeviationByValueAndSymbol(valueOfDimension,
-                    symbolFromInput, symbolIsOverHh, getValueItFromInput(input));
-            int deviationByValueAndIt = databaseDimensionTables.getDeviationByValueAndIt(valueOfDimension, getValueItFromInput(input));
-
-
-
-
-        Dimension dimension = new Dimension(valueOfDimension,
+        return new Dimension(valueOfDimension,
                 makeLowerDeviation(deviationByValueAndSymbol, deviationByValueAndIt),
                 makeUpperDeviation(deviationByValueAndSymbol, deviationByValueAndIt));
-
-        return dimension;
     }
 
     private int makeUpperDeviation(int deviationByValueAndSymbol, int deviationByValueAndIt) {
@@ -77,7 +70,7 @@ public class DimensionParser {
         return lettersOfInput.charAt(0);
     }
 
-    private int getValueItFromInput(String input) {
+    private int getValueITFromInput(String input) {
         String valueOfIt = "";
 
         Matcher matcher = pattern.matcher(input);
@@ -86,13 +79,5 @@ public class DimensionParser {
             valueOfIt = matcher.group(4);
         }
         return Integer.valueOf(valueOfIt);
-    }
-
-    private boolean isSymbolOverHh(String input) {
-        int symbolInteger = Character.toLowerCase(getLetterOfInput(input));
-        if (symbolInteger > 105 && symbolInteger < 120) {
-            return true;
-        }
-        return false;
     }
 }

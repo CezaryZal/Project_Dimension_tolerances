@@ -1,0 +1,156 @@
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
+
+public class ToleranceDao {
+
+    public List getListOfLowerDimension(String nameTable) {
+        Statement statement;
+        ResultSet resultSet;
+        List<Integer> listDimensionsOfRecords = new ArrayList<>();
+
+        try (Connection connection = Databases.getConnection()) {
+
+            statement = connection.createStatement();
+            resultSet = statement.executeQuery("SELECT * FROM " + nameTable);
+
+            while (resultSet.next()) {
+                int value = resultSet.getInt("lower_dimension[mm]");
+                listDimensionsOfRecords.add(value);
+            }
+        } catch (SQLException error) {
+            System.out.println("Wysątpienie błedu. Proszę sprawdzić poprawność wpisania wymiaru.");
+            System.out.println("Wychwycony błąd: " + error.getMessage());
+        }
+        return listDimensionsOfRecords;
+    }
+
+    public int getDeviationByValueAndIt (int valueOfRecord, int valueToleranceClass){
+        ResultSet resultSet;
+        int valueFromDB = 0;
+        String columnLabelForIT = "IT" + valueToleranceClass + "[um]";
+
+        try (Connection connection = Databases.getConnection()) {
+
+            PreparedStatement stat = connection.prepareStatement(
+                    "SELECT * FROM nominal_tolerance WHERE `lower_dimension[mm]`=" + valueOfRecord);
+            resultSet = stat.executeQuery();
+
+            while (resultSet.next()) {
+                valueFromDB = resultSet.getInt(columnLabelForIT);
+            }
+
+        } catch (SQLException error) {
+            System.out.println("Wysątpienie błedu. Proszę sprawdzić poprawność wpisania wymiaru.");
+            System.out.println("Wychwycony błąd: " + error.getMessage());
+        }
+        return valueFromDB;
+    }
+
+    public int getDeviationFromHoleOverHTable (int valueOfRecord, String symbolFromInput){
+        ResultSet resultSet;
+        int valueFromDB = 0;
+
+        try (Connection connection = Databases.getConnection()) {
+
+            PreparedStatement stat = connection.prepareStatement(
+                    "SELECT * FROM basic_deviations_for_hole_over_symbol_h WHERE `lower_dimension[mm]` = " + valueOfRecord);
+            resultSet = stat.executeQuery();
+
+            while (resultSet.next()) {
+                valueFromDB = resultSet.getInt(symbolFromInput);
+            }
+
+        } catch (SQLException error) {
+            System.out.println("Wysątpienie błedu. Proszę sprawdzić poprawność wpisania wymiaru.");
+            System.out.println("Wychwycony błąd: " + error.getMessage());
+        }
+        return valueFromDB;
+    }
+
+    public int getDeviationFromHoleUnderHTable (int valueOfRecord, String symbolFromInput){
+        ResultSet resultSet;
+        int valueFromDB = 0;
+
+        try (Connection connection = Databases.getConnection()) {
+
+            PreparedStatement stat = connection.prepareStatement(
+                    "SELECT * FROM basic_deviations_for_hole_under_symbol_h WHERE `lower_dimension[mm]` = " + valueOfRecord);
+            resultSet = stat.executeQuery();
+
+            while (resultSet.next()) {
+                valueFromDB = resultSet.getInt(symbolFromInput);
+            }
+
+        } catch (SQLException error) {
+            System.out.println("Wysątpienie błedu. Proszę sprawdzić poprawność wpisania wymiaru.");
+            System.out.println("Wychwycony błąd: " + error.getMessage());
+        }
+        return valueFromDB;
+    }
+
+    public int getDeviationFromShaftOverHTable (int valueOfRecord, String symbolFromInput){
+        ResultSet resultSet;
+        int valueFromDB = 0;
+
+        try (Connection connection = Databases.getConnection()) {
+
+            PreparedStatement stat = connection.prepareStatement(
+                    "SELECT * FROM basic_deviations_for_shaft_over_symbol_h WHERE `lower_dimension[mm]` = " + valueOfRecord);
+            resultSet = stat.executeQuery();
+
+            while (resultSet.next()) {
+                valueFromDB = resultSet.getInt(symbolFromInput);
+            }
+
+        } catch (SQLException error) {
+            System.out.println("Wysątpienie błedu. Proszę sprawdzić poprawność wpisania wymiaru.");
+            System.out.println("Wychwycony błąd: " + error.getMessage());
+        }
+        return valueFromDB;
+    }
+
+    public int getDeviationFromShaftUnderHTable (int valueOfRecord, String symbolFromInput){
+        ResultSet resultSet;
+        int valueFromDB = 0;
+
+        try (Connection connection = Databases.getConnection()) {
+
+            PreparedStatement stat = connection.prepareStatement(
+                    "SELECT * FROM basic_deviations_for_shaft_under_symbol_h WHERE `lower_dimension[mm]` = " + valueOfRecord);
+            resultSet = stat.executeQuery();
+
+            while (resultSet.next()) {
+                valueFromDB = resultSet.getInt(symbolFromInput);
+            }
+
+        } catch (SQLException error) {
+            System.out.println("Wysątpienie błedu. Proszę sprawdzić poprawność wpisania wymiaru.");
+            System.out.println("Wychwycony błąd: " + error.getMessage());
+        }
+        return valueFromDB;
+    }
+
+    public int getDeviationFromAdditionTable (int valueOfRecord, int valueToleranceClass){
+        ResultSet resultSet;
+        int valueFromDB = 0;
+        String columnLabelForIT = "IT" + valueToleranceClass;
+
+        try (Connection connection = Databases.getConnection()) {
+
+            PreparedStatement stat = connection.prepareStatement(
+                    "SELECT * FROM addition_for_hole_over_symbol_h WHERE `lower_dimension[mm]` = " + valueOfRecord);
+            resultSet = stat.executeQuery();
+
+            while (resultSet.next()) {
+                valueFromDB = resultSet.getInt(columnLabelForIT);
+            }
+
+        } catch (SQLException error) {
+            System.out.println("Wysątpienie błedu. Proszę sprawdzić poprawność wpisania wymiaru.");
+            System.out.println("Wychwycony błąd: " + error.getMessage());
+        }
+        return valueFromDB;
+    }
+
+}
