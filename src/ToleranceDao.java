@@ -4,7 +4,7 @@ import java.util.List;
 
 public class ToleranceDao {
 
-    public List getListOfLowerDimension(String nameTable) {
+    public List <Integer> getListOfLowerDimension(String nameTable) {
         Statement statement;
         ResultSet resultSet;
         List<Integer> listDimensionsOfRecords = new ArrayList<>();
@@ -15,8 +15,7 @@ public class ToleranceDao {
             resultSet = statement.executeQuery("SELECT * FROM " + nameTable);
 
             while (resultSet.next()) {
-                int value = resultSet.getInt("lower_dimension[mm]");
-                listDimensionsOfRecords.add(value);
+                listDimensionsOfRecords.add(resultSet.getInt("lower_dimension[mm]"));
             }
         } catch (SQLException error) {
             System.out.println("Wysątpienie błedu. Proszę sprawdzić poprawność wpisania wymiaru.");

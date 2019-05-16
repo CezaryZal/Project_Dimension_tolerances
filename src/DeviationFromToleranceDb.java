@@ -52,7 +52,7 @@ public class DeviationFromToleranceDb {
     }
 
     public int getValueOfRecord (int valueOfDimension, String nameTable){
-        List<Integer> listDimensionsOfRecords = toleranceDao.getListOfLowerDimension(nameTable);
+        List <Integer> listDimensionsOfRecords = toleranceDao.getListOfLowerDimension(nameTable);
 
         int lastDimension = 0;
 

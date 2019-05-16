@@ -6,7 +6,7 @@ public class DimensionTolerances {
 
         DimensionParser dimensionDimension = new DimensionParser();
         Scanner scanerInput = new Scanner(System.in);
-        String input = "42d5";
+        String input = "42g5";
 //        while (!input.equals("stop")) {
 //            System.out.println("Wprowadz wymiary (np. 45g9)aby otrzymac odchylenie gorne i dolne lub wpisz \"stop\" aby zakonczyc wpisywanie");
 //            input = scanerInput.nextLine();
