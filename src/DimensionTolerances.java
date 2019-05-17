@@ -4,7 +4,7 @@ public class DimensionTolerances {
     public static void main(String[] args) {
 
 
-        DimensionParser dimensionDimension = new DimensionParser();
+        DimensionParser dimensionParser = new DimensionParser();
         Scanner scanerInput = new Scanner(System.in);
         String input = "42g5";
 //        while (!input.equals("stop")) {
@@ -17,7 +17,7 @@ public class DimensionTolerances {
 //                break;
 //            }
 
-            System.out.println(dimensionDimension.create(input));
+            System.out.println(dimensionParser.create(input));
         }
 //    }
 }

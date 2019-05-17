@@ -3,71 +3,67 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class DimensionParser {
-    private DeviationFromToleranceDb deviation = new DeviationFromToleranceDb();
     private static final Pattern pattern = Pattern.compile("([1-9][0-9]*)([a-zA-Z])([1-9][0-8]*)");
 
-    private Dimension dimension;
+    private int valueOfDimension;
+    private char symbolFromInput;
+    private boolean isSymbolOverHh;
+    private int valueITFromInput;
 
     public Dimension create(String input) {
-        dimension = shareInput(input);
+        DeviationFromToleranceDb deviation = new DeviationFromToleranceDb();
 
-        int deviationByValueAndSymbol = deviation.getDeviationByValueAndSymbol(dimension.getValueOfDimension(),
-                dimension.getSymbolFromInput(), dimension.isSymbolOverHh(), dimension.getValueITFromInput());
-        int deviationByValueAndIt = deviation.getDeviationByValueAndIt(dimension.getValueOfDimension(),  dimension.getValueITFromInput());
+        shareInput(input);
 
-        dimension.setLowerDeviation(makeLowerDeviation(deviationByValueAndSymbol, deviationByValueAndIt));
-        dimension.setUpperDeviation(makeUpperDeviation(deviationByValueAndSymbol, deviationByValueAndIt));
-        return dimension;
+        int deviationByValueAndSymbol = deviation.getDeviationByValueAndSymbol(valueOfDimension,
+                symbolFromInput, isSymbolOverHh, valueITFromInput);
+        int deviationByValueAndIt = deviation.getDeviationByValueAndIt(valueOfDimension, valueITFromInput);
+
+        return new Dimension(valueOfDimension, makeLowerDeviation(deviationByValueAndSymbol, deviationByValueAndIt),
+                makeUpperDeviation(deviationByValueAndSymbol, deviationByValueAndIt));
     }
 
-    public Dimension shareInput(String input) {
-        int inputValue = 0;
-        char symbolFromInput = 'i';
-        boolean symbolIsOverHh;
-        int valueITFromInput = 0;
+    public void shareInput(String input) {
 
         Matcher matcher = pattern.matcher(input);
         if (matcher.matches()){
-            inputValue = Integer.valueOf(matcher.group(1));
+            valueOfDimension = Integer.valueOf(matcher.group(1));
             symbolFromInput = matcher.group(2).charAt(0);
             valueITFromInput = Integer.valueOf(matcher.group(3));
         } else {
             Matcher matcher1 = pattern.matcher(input);
             if (matcher1.find()){
-                inputValue = Integer.valueOf(matcher1.group(1));
+                valueOfDimension = Integer.valueOf(matcher1.group(1));
                 symbolFromInput = matcher1.group(2).charAt(0);
                 valueITFromInput = Integer.valueOf(matcher1.group(3));
             } else {
                 System.out.println("Wymiar został niewłaściwie wpisany. Proszę spróbować ponownie");
             }
         }
-
-        symbolIsOverHh = Character.toLowerCase(symbolFromInput) > 'h' && Character.toLowerCase(symbolFromInput) < 'z';
-
-        return new Dimension(inputValue, symbolFromInput, symbolIsOverHh, valueITFromInput);
+        isSymbolOverHh = Character.toLowerCase(symbolFromInput) > 'h' && Character.toLowerCase(symbolFromInput) < 'z';
     }
 
     public int makeUpperDeviation(int deviationByValueAndSymbol, int deviationByValueAndIt) {
-        if (Character.isLowerCase(dimension.getSymbolFromInput())) {
-            if (dimension.isSymbolOverHh()) {
+        if (Character.isLowerCase(symbolFromInput)) {
+            if (isSymbolOverHh) {
                 return deviationByValueAndSymbol + deviationByValueAndIt;
             }
             return deviationByValueAndSymbol;
         }
-        if (dimension.isSymbolOverHh()){
+        if (isSymbolOverHh){
             return deviationByValueAndSymbol;
         }
         return deviationByValueAndSymbol + deviationByValueAndIt;
     }
 
     public int makeLowerDeviation(int deviationByValueAndSymbol, int deviationByValueAndIt) {
-        if (Character.isLowerCase(dimension.getSymbolFromInput())) {
-            if (dimension.isSymbolOverHh()){
+        if (Character.isLowerCase(symbolFromInput)) {
+            if (isSymbolOverHh){
                 return deviationByValueAndSymbol;
             }
             return deviationByValueAndSymbol - deviationByValueAndIt;
         }
-        if (dimension.isSymbolOverHh()){
+        if (isSymbolOverHh){
             return deviationByValueAndSymbol - deviationByValueAndIt;
         }
         return deviationByValueAndSymbol;
