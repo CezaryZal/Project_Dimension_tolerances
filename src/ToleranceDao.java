@@ -4,15 +4,13 @@ import java.util.List;
 
 public class ToleranceDao {
 
-    public List <Integer> getListOfLowerDimension(String nameTable) {
-        Statement statement;
-        ResultSet resultSet;
+    List<Integer> getListOfLowerDimension(String nameTable) {
         List<Integer> listDimensionsOfRecords = new ArrayList<>();
 
         try (Connection connection = Databases.getConnection()) {
 
-            statement = connection.createStatement();
-            resultSet = statement.executeQuery("SELECT * FROM " + nameTable);
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM " + nameTable);
 
             while (resultSet.next()) {
                 listDimensionsOfRecords.add(resultSet.getInt("lower_dimension[mm]"));
@@ -24,8 +22,7 @@ public class ToleranceDao {
         return listDimensionsOfRecords;
     }
 
-    public int getDeviationByValueAndIt (int valueOfRecord, int valueToleranceClass){
-        ResultSet resultSet;
+    int getDeviationByValueAndIt(int valueOfRecord, int valueToleranceClass) {
         int valueFromDB = 0;
         String sqlQuery = "SELECT * FROM nominal_tolerance WHERE `lower_dimension[mm]`=?";
         String columnLabelForIT = "IT" + valueToleranceClass + "[um]";
@@ -34,7 +31,7 @@ public class ToleranceDao {
 
             PreparedStatement stat = connection.prepareStatement(sqlQuery);
             stat.setInt(1, valueOfRecord);
-            resultSet = stat.executeQuery();
+            ResultSet resultSet = stat.executeQuery();
 
             while (resultSet.next()) {
                 valueFromDB = resultSet.getInt(columnLabelForIT);
@@ -47,8 +44,7 @@ public class ToleranceDao {
         return valueFromDB;
     }
 
-    public int getDeviationFromHoleOverHTable (int valueOfRecord1, String symbolFromInput){
-        ResultSet resultSet;
+    int getDeviationFromHoleOverHTable(int valueOfRecord1, String symbolFromInput) {
         int valueFromDB = 0;
         String sqlQuery = "SELECT * FROM basic_deviations_for_hole_over_symbol_h WHERE `lower_dimension[mm]` = ?";
 
@@ -56,7 +52,7 @@ public class ToleranceDao {
 
             PreparedStatement stat = connection.prepareStatement(sqlQuery);
             stat.setInt(1, valueOfRecord1);
-            resultSet = stat.executeQuery();
+            ResultSet resultSet = stat.executeQuery();
 
             while (resultSet.next()) {
                 valueFromDB = resultSet.getInt(symbolFromInput);
@@ -69,8 +65,7 @@ public class ToleranceDao {
         return valueFromDB;
     }
 
-    public int getDeviationFromHoleUnderHTable (int valueOfRecord, String symbolFromInput){
-        ResultSet resultSet;
+    int getDeviationFromHoleUnderHTable(int valueOfRecord, String symbolFromInput) {
         int valueFromDB = 0;
         String sqlQuery = "SELECT * FROM basic_deviations_for_hole_under_symbol_h WHERE `lower_dimension[mm]` = ?";
 
@@ -78,7 +73,7 @@ public class ToleranceDao {
 
             PreparedStatement stat = connection.prepareStatement(sqlQuery);
             stat.setInt(1, valueOfRecord);
-            resultSet = stat.executeQuery();
+            ResultSet resultSet = stat.executeQuery();
 
             while (resultSet.next()) {
                 valueFromDB = resultSet.getInt(symbolFromInput);
@@ -91,8 +86,7 @@ public class ToleranceDao {
         return valueFromDB;
     }
 
-    public int getDeviationFromShaftOverHTable (int valueOfRecord, String symbolFromInput){
-        ResultSet resultSet;
+    int getDeviationFromShaftOverHTable(int valueOfRecord, String symbolFromInput) {
         int valueFromDB = 0;
         String sqlQuery = "SELECT * FROM basic_deviations_for_shaft_over_symbol_h WHERE `lower_dimension[mm]` = ?";
 
@@ -100,7 +94,7 @@ public class ToleranceDao {
 
             PreparedStatement stat = connection.prepareStatement(sqlQuery);
             stat.setInt(1, valueOfRecord);
-            resultSet = stat.executeQuery();
+            ResultSet resultSet = stat.executeQuery();
 
             while (resultSet.next()) {
                 valueFromDB = resultSet.getInt(symbolFromInput);
@@ -113,8 +107,7 @@ public class ToleranceDao {
         return valueFromDB;
     }
 
-    public int getDeviationFromShaftUnderHTable (int valueOfRecord, String symbolFromInput){
-        ResultSet resultSet;
+    int getDeviationFromShaftUnderHTable(int valueOfRecord, String symbolFromInput) {
         int valueFromDB = 0;
         String sqlQuery = "SELECT * FROM basic_deviations_for_shaft_under_symbol_h WHERE `lower_dimension[mm]` = ?";
 
@@ -122,7 +115,7 @@ public class ToleranceDao {
 
             PreparedStatement stat = connection.prepareStatement(sqlQuery);
             stat.setInt(1, valueOfRecord);
-            resultSet = stat.executeQuery();
+            ResultSet resultSet = stat.executeQuery();
 
             while (resultSet.next()) {
                 valueFromDB = resultSet.getInt(symbolFromInput);
@@ -135,8 +128,7 @@ public class ToleranceDao {
         return valueFromDB;
     }
 
-    public int getDeviationFromAdditionTable (int valueOfRecord, int valueToleranceClass){
-        ResultSet resultSet;
+    int getDeviationFromAdditionTable(int valueOfRecord, int valueToleranceClass) {
         int valueFromDB = 0;
         String sqlQuery = "SELECT * FROM addition_for_hole_over_symbol_h WHERE `lower_dimension[mm]` = ?";
         String columnLabelForIT = "IT" + valueToleranceClass;
@@ -145,7 +137,7 @@ public class ToleranceDao {
 
             PreparedStatement stat = connection.prepareStatement(sqlQuery);
             stat.setInt(1, valueOfRecord);
-            resultSet = stat.executeQuery();
+            ResultSet resultSet = stat.executeQuery();
 
             while (resultSet.next()) {
                 valueFromDB = resultSet.getInt(columnLabelForIT);
@@ -157,5 +149,4 @@ public class ToleranceDao {
         }
         return valueFromDB;
     }
-
 }
