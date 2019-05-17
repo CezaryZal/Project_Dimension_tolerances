@@ -21,7 +21,7 @@ public class Dimension {
         return symbolFromInput;
     }
 
-    public boolean isSymbolIsOverHh() {
+    public boolean isSymbolOverHh() {
         return symbolIsOverHh;
     }
 

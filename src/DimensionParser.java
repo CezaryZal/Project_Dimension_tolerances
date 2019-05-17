@@ -12,7 +12,7 @@ public class DimensionParser {
         dimension = shareInput(input);
 
         int deviationByValueAndSymbol = deviation.getDeviationByValueAndSymbol(dimension.getValueOfDimension(),
-                dimension.getSymbolFromInput(), dimension.isSymbolIsOverHh(), dimension.getValueITFromInput());
+                dimension.getSymbolFromInput(), dimension.isSymbolOverHh(), dimension.getValueITFromInput());
         int deviationByValueAndIt = deviation.getDeviationByValueAndIt(dimension.getValueOfDimension(),  dimension.getValueITFromInput());
 
         dimension.setLowerDeviation(makeLowerDeviation(deviationByValueAndSymbol, deviationByValueAndIt));
@@ -49,12 +49,12 @@ public class DimensionParser {
 
     public int makeUpperDeviation(int deviationByValueAndSymbol, int deviationByValueAndIt) {
         if (Character.isLowerCase(dimension.getSymbolFromInput())) {
-            if (dimension.isSymbolIsOverHh()) {
+            if (dimension.isSymbolOverHh()) {
                 return deviationByValueAndSymbol + deviationByValueAndIt;
             }
             return deviationByValueAndSymbol;
         }
-        if (dimension.isSymbolIsOverHh()){
+        if (dimension.isSymbolOverHh()){
             return deviationByValueAndSymbol;
         }
         return deviationByValueAndSymbol + deviationByValueAndIt;
@@ -62,12 +62,12 @@ public class DimensionParser {
 
     public int makeLowerDeviation(int deviationByValueAndSymbol, int deviationByValueAndIt) {
         if (Character.isLowerCase(dimension.getSymbolFromInput())) {
-            if (dimension.isSymbolIsOverHh()){
+            if (dimension.isSymbolOverHh()){
                 return deviationByValueAndSymbol;
             }
             return deviationByValueAndSymbol - deviationByValueAndIt;
         }
-        if (dimension.isSymbolIsOverHh()){
+        if (dimension.isSymbolOverHh()){
             return deviationByValueAndSymbol - deviationByValueAndIt;
         }
         return deviationByValueAndSymbol;
