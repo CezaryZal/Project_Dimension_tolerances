@@ -1,5 +1,4 @@
 public class Dimension {
-
     private int valueOfDimension;
     private char symbolFromInput;
     private boolean symbolIsOverHh;
@@ -39,8 +38,9 @@ public class Dimension {
     }
 
     @Override
-    public String toString () {
+    public String toString() {
         return "Wymiar glowny: " + valueOfDimension + "mm. \nWymiar dolnej odchylki wynosi: " +
                 lowerDeviation + "um. \nWymiar gornej odchylki wynosi: " + upperDeviation + "um.";
     }
 }
+

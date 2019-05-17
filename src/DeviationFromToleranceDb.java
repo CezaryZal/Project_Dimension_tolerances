@@ -2,7 +2,7 @@ import java.util.List;
 
 public class DeviationFromToleranceDb {
 
-    ToleranceDao toleranceDao = new ToleranceDao();
+    private ToleranceDao toleranceDao = new ToleranceDao();
 
     public int getDeviationByValueAndSymbol(int valueOfDimension, char symbolFromInput, boolean symbolIsOverHh, int valueToleranceClass) {
 
@@ -32,7 +32,7 @@ public class DeviationFromToleranceDb {
                 int deviation = toleranceDao.getDeviationFromHoleUnderHTable(
                         getValueOfRecord(valueOfDimension, nameTable), String.valueOf(symbolFromInput));
 
-                if (symbolFromInput > 74 && symbolFromInput < 80 && valueOfDimension > 3) {
+                if (symbolFromInput > 'J' && symbolFromInput < 'P' && valueOfDimension > 3) {
                     String nameAddTable = "addition_for_hole_over_symbol_h";
 
                     int addValueDelta = toleranceDao.getDeviationFromAdditionTable(
@@ -48,15 +48,15 @@ public class DeviationFromToleranceDb {
     public int getDeviationByValueAndIt(int valueOfDimension, int valueToleranceClass) {
         String nameTable = "nominal_tolerance";
 
-        return toleranceDao.getDeviationByValueAndIt(getValueOfRecord(valueOfDimension, nameTable),valueToleranceClass);
+        return toleranceDao.getDeviationByValueAndIt(getValueOfRecord(valueOfDimension, nameTable), valueToleranceClass);
     }
 
-    public int getValueOfRecord (int valueOfDimension, String nameTable){
-        List <Integer> listDimensionsOfRecords = toleranceDao.getListOfLowerDimension(nameTable);
+    public int getValueOfRecord(int valueOfDimension, String nameTable) {
+        List<Integer> listDimensionsOfRecords = toleranceDao.getListOfLowerDimension(nameTable);
 
         int lastDimension = 0;
 
-        for (Integer value : listDimensionsOfRecords){
+        for (Integer value : listDimensionsOfRecords) {
             if (valueOfDimension >= lastDimension && valueOfDimension < value) {
                 break;
             }
