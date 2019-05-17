@@ -11,8 +11,6 @@ public class DimensionParser {
     public Dimension create(String input) {
         dimension = shareInput(input);
 
-
-
         int deviationByValueAndSymbol = deviation.getDeviationByValueAndSymbol(dimension.getValueOfDimension(),
                 dimension.getSymbolFromInput(), dimension.isSymbolIsOverHh(), dimension.getValueITFromInput());
         int deviationByValueAndIt = deviation.getDeviationByValueAndIt(dimension.getValueOfDimension(),  dimension.getValueITFromInput());
