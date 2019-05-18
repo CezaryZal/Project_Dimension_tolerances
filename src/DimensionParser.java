@@ -3,17 +3,17 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class DimensionParser {
-    private static final Pattern pattern = Pattern.compile("([1-9][0-9]*)([a-zA-Z])([1-9][0-8]*)");
 
     private int valueOfDimension;
     private char symbolFromInput;
     private boolean isSymbolOverHh;
     private int valueITFromInput;
 
-    public Dimension create(String input) {
+    public Dimension createDimensionTolerance (String input) {
         DeviationFromToleranceDb deviation = new DeviationFromToleranceDb();
 
         shareInput(input);
+        isSymbolOverHh = Character.toLowerCase(symbolFromInput) > 'h' && Character.toLowerCase(symbolFromInput) < 'z';
 
         int deviationByValueAndSymbol = deviation.getDeviationByValueAndSymbol(valueOfDimension,
                 symbolFromInput, isSymbolOverHh, valueITFromInput);
@@ -24,23 +24,16 @@ public class DimensionParser {
     }
 
     public void shareInput(String input) {
+        final Pattern pattern = Pattern.compile("([1-9][0-9]*)([a-zA-Z])([1-9][0-8]*)");
 
         Matcher matcher = pattern.matcher(input);
-        if (matcher.matches()){
+        if (matcher.find()) {
             valueOfDimension = Integer.valueOf(matcher.group(1));
             symbolFromInput = matcher.group(2).charAt(0);
             valueITFromInput = Integer.valueOf(matcher.group(3));
         } else {
-            Matcher matcher1 = pattern.matcher(input);
-            if (matcher1.find()){
-                valueOfDimension = Integer.valueOf(matcher1.group(1));
-                symbolFromInput = matcher1.group(2).charAt(0);
-                valueITFromInput = Integer.valueOf(matcher1.group(3));
-            } else {
-                System.out.println("Wymiar został niewłaściwie wpisany. Proszę spróbować ponownie");
-            }
+            System.out.println("Wymiar został niewłaściwie wpisany. Proszę spróbować ponownie");
         }
-        isSymbolOverHh = Character.toLowerCase(symbolFromInput) > 'h' && Character.toLowerCase(symbolFromInput) < 'z';
     }
 
     public int makeUpperDeviation(int deviationByValueAndSymbol, int deviationByValueAndIt) {
